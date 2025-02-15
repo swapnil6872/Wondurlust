@@ -38,13 +38,18 @@ app.get('/',(req,res)=>{
 //     res.send('sucesss new')
 // });
 
-
+ 
 
 // index Route
 app.get('/listings',async (req,res) =>{
   const allListings = await Listing.find();
   res.render('listings/index.ejs',({allListings}));
 })
+
+// new Route
+app.get('/listings/new',(req,res)=>{
+    res.render('listings/new')
+});
 
 //show route 
 app.get('/listings/:id' ,async (req,res)=>{
@@ -53,6 +58,16 @@ app.get('/listings/:id' ,async (req,res)=>{
     res.render('listings/show',{listing}); 
 
 })
+
+// create route 
+app.post('/listings',async (req,res)=>{
+    
+     // direct add in model by instance 
+     const newListing =  new Listing(req.body.listings);
+     await newListing.save();
+     res.redirect('/listings');
+    
+});
 
 app.listen(8080,()=>{
    console.log("server is listening to port 8080");
