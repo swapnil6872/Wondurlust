@@ -6,7 +6,7 @@ const listingSchema = new Schema ({
         type:String,
         requied:true
     },
-    discription:String,
+    description:String,
     image:{
         default:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSuCgO_PBp8530SDSejcLGOLq6sxwA5ymlh0g&s",
         type:String,
