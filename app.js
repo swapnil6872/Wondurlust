@@ -108,7 +108,8 @@ app.all("*",(req,res,next)=>{
 // custom errorHandaler
 app.use((err, req, res, next) => {
     let{status=500,message="something went wrong"} = err;
-    res.status(status).send(message);
+    res.status(status).render('error',{err});
+    // res.status(status).send(message);
 })
 
 app.listen(8080, () => {
