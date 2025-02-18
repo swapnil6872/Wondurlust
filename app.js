@@ -7,6 +7,8 @@ const methodOverride = require('method-override')
 const ejsMate = require('ejs-mate');
 const wrapAsync=require('./utils/wrapAsync')
 const ExpressError = require('./utils/ExpressError');
+const { listingSchema } = require('./schema');
+
 
 
 const MONGO_URL = "mongodb://127.0.0.1:27017/wondurlust";
@@ -32,6 +34,16 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.get('/', (req, res) => {
     res.send('hi i am root')
 });
+
+const validateListing =(req,res,next)=>{
+    let {error}=  listingSchema.validate(req.body);
+        if(error){
+            let errmsg =error.details.map((el)=> el.message).join(',');
+            throw new ExpressError(400,errmsg);
+        }else{
+            next();
+        }
+}
 
 // app.get('/test',async(req,res)=>{
 //     let newList = await Listing.findOneAndUpdate({price:1200},{
@@ -65,11 +77,9 @@ app.get('/listings/:id',wrapAsync( async (req, res) => {
 }))
 
 // create route 
-app.post('/listings',wrapAsync(async(req,res,next) => {
+app.post('/listings', validateListing,wrapAsync(async(req,res,next) => {
          // Custom Error for Listing is empty
-         if(!req.body.listing){
-            throw new ExpressError(400,'send valid data for listing');
-         }
+       
         // direct add in model by instance 
         const newListing = new Listing(req.body.listings);
         await newListing.save();
@@ -84,11 +94,9 @@ app.get('/listings/:id/edit',wrapAsync( async (req, res) => {
 }));
 
 //update route
-app.put('/listings/:id',wrapAsync( async (req, res) => {
+app.put('/listings/:id',validateListing,wrapAsync( async (req, res) => {
      // Custom Error for Listing is empty
-     if(!req.body.listing){
-        throw new ExpressError(400,'send valid data for listing');
-     }
+  
     let { id } = req.params;
     await Listing.findByIdAndUpdate(id, { ...req.body.listings });
     res.redirect('/listings/' + id)
