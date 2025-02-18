@@ -7,35 +7,48 @@
                 <div class="mb-3">
                     <label for="title" class="form-label">Title</label>
                     <input type="text" id="title" name="listings[title]" placeholder="Add a catchy titile" class="form-control" required>
+                    <div class="valid-feedback">Looks good!</div>
+                    <div class="invalid-feedback">Title is required and should be descriptive.</div>
                 </div>
 
                 <div class="mb-3">
                     <label for="description" class="form-label">Description</label>
                     <textarea type="text" id="description" name="listings[description]" placeholder="Add a Description"
                         class="form-control" required></textarea>
+                        <div class="valid-feedback">Nice! A detailed description helps customers.</div>
+                        <div class="invalid-feedback">Please provide a short but meaningful description.</div>
                 </div>
 
                 <div class="mb-3">
                     <label for="image" class="form-label">Image Link</label>
                     <input type="text" id="image" name="listings[image]" placeholder="enter image URL/link"
                         class="form-control">
+                        <div class="valid-feedback">Image link looks valid!</div>
+                        <div class="invalid-feedback">Please enter a valid image URL.</div>
                 </div>
 
                 <div class="row">
                     <div class="mb-3 col-md-4">
                         <label for="price" class="form-label"> Price</label>
                         <input type="number" id="price" name="listings[price]" placeholder="Add Price" class="form-control" required>
+                        <div class="valid-feedback">Price added successfully!</div>
+                        <div class="invalid-feedback">Price is required and should be a positive number.</div>
                     </div>
 
                     <div class="mb-3 col-md-8">
                         <label for="country" class="form-label">Country</label>
                         <input type="text" id="country" name="listings[country]" placeholder="India" class="form-control" required>
+                        <div class="valid-feedback">Great! Country name added.</div>
+                        <div class="invalid-feedback">Please enter a valid country name.</div>
+                
                     </div>
                 </div>
 
                 <div class="mb-3">
                     <label for="location" class="form-label"> Location</label>
                     <input type="text" id="location" name="listings[location]" placeholder="Add a Location" class="form-control" required>
+                    <div class="valid-feedback">Perfect! Location is set.</div>
+                    <div class="invalid-feedback">Please enter a valid location.</div>
                 </div>
                 <button class="btn btn-dark edit-btn">Add</button>
             </form>
