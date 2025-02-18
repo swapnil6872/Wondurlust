@@ -5,6 +5,8 @@ const Listing = require('./models/listing')
 const path = require('path');
 const methodOverride = require('method-override')
 const ejsMate = require('ejs-mate');
+const wrapAsync=require('./utils/wrapAsync')
+const ExpressError = require('./utils/ExpressError');
 
 
 const MONGO_URL = "mongodb://127.0.0.1:27017/wondurlust";
@@ -45,10 +47,10 @@ app.get('/', (req, res) => {
 
 
 // index Route
-app.get('/listings', async (req, res) => {
+app.get('/listings',wrapAsync( async (req, res) => {
     const allListings = await Listing.find();
     res.render('listings/index.ejs', ({ allListings }));
-})
+}))
 
 // new Route
 app.get('/listings/new', (req, res) => {
@@ -56,42 +58,57 @@ app.get('/listings/new', (req, res) => {
 });
 
 //show route 
-app.get('/listings/:id', async (req, res) => {
+app.get('/listings/:id',wrapAsync( async (req, res) => {
     let { id } = req.params;
     const listing = await Listing.findById(id);
     res.render('listings/show', { listing });
-
-})
+}))
 
 // create route 
-app.post('/listings', async (req, res) => {
-
-    // direct add in model by instance 
-    const newListing = new Listing(req.body.listings);
-    await newListing.save();
-    res.redirect('/listings');
-
-});
+app.post('/listings',wrapAsync(async(req,res,next) => {
+         // Custom Error for Listing is empty
+         if(!req.body.listing){
+            throw new ExpressError(400,'send valid data for listing');
+         }
+        // direct add in model by instance 
+        const newListing = new Listing(req.body.listings);
+        await newListing.save();
+        res.redirect('/listings');
+}));
 
 //Edit Route
-app.get('/listings/:id/edit', async (req, res) => {
+app.get('/listings/:id/edit',wrapAsync( async (req, res) => {
     let { id } = req.params;
     const listing = await Listing.findById(id);
     res.render('listings/edit', { listing });
-});
+}));
 
 //update route
-app.put('/listings/:id', async (req, res) => {
+app.put('/listings/:id',wrapAsync( async (req, res) => {
+     // Custom Error for Listing is empty
+     if(!req.body.listing){
+        throw new ExpressError(400,'send valid data for listing');
+     }
     let { id } = req.params;
     await Listing.findByIdAndUpdate(id, { ...req.body.listings });
     res.redirect('/listings/' + id)
-})
+}))
 
 //delete route
-app.delete('/listings/:id', async (req, res) => {
+app.delete('/listings/:id',wrapAsync( async (req, res) => {
     let { id } = req.params;
     let deleteListing = await Listing.findByIdAndDelete(id);
     res.redirect('/listings');
+}))
+
+// Wildcard 404 Handler
+app.all("*",(req,res,next)=>{
+    next(new ExpressError(404,"page not found!"));
+})
+// custom errorHandaler
+app.use((err, req, res, next) => {
+    let{status=500,message="something went wrong"} = err;
+    res.status(status).send(message);
 })
 
 app.listen(8080, () => {
