@@ -9,6 +9,7 @@ const wrapAsync=require('./utils/wrapAsync')
 const ExpressError = require('./utils/ExpressError');
 const { listingSchema } = require('./schema');
 const Review = require('./models/review');
+const {reviewSchema} = require('./schema');
 const { listenerCount } = require('process');
 
 
@@ -24,6 +25,7 @@ main().then(() => {
 async function main() {
     await mongoose.connect(MONGO_URL)
 }
+
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'))
@@ -42,6 +44,17 @@ const validateListing =(req,res,next)=>{
         if(error){
             let errmsg =error.details.map((el)=> el.message).join(',');
             throw new ExpressError(400,errmsg);
+        }else{
+            next();
+        }
+}
+
+const validateReview =(req,res,next)=>{
+    let {error}=  reviewSchema.validate(req.body);
+        if(error){
+            let errmsg =error.details.map((el)=> el.message).join(',');
+            throw new ExpressError(400,errmsg);
+            // return next(new ExpressError(400, errmsg)); 
         }else{
             next();
         }
@@ -114,7 +127,7 @@ app.delete('/listings/:id',wrapAsync( async (req, res) => {
 //Reviews 
 //post Route
 
-app.post('/listings/:id/reviews',async (req,res)=>{
+app.post('/listings/:id/reviews', validateReview ,wrapAsync( async (req,res)=>{
    let listing = await Listing.findById(req.params.id)
    let newReview =new Review(req.body.review);
    
@@ -124,7 +137,7 @@ app.post('/listings/:id/reviews',async (req,res)=>{
    await listing.save();
 
 res.redirect(`/listings/${req.params.id}`)
-})
+}));
 
 // Wildcard 404 Handler
 app.all("*",(req,res,next)=>{
