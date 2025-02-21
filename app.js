@@ -139,6 +139,15 @@ app.post('/listings/:id/reviews', validateReview ,wrapAsync( async (req,res)=>{
 res.redirect(`/listings/${req.params.id}`)
 }));
 
+//Delete Review Route 
+app.delete('/listings/:id/reviews/:reviewId' , wrapAsync(async (req,res,)=>{
+        let{id ,reviewId} =req.params;
+        await Listing.findByIdAndUpdate(id,{$pull:{reviews:reviewId}})
+        await Review.findByIdAndDelete(reviewId);
+        res.redirect(`/listings/${id}`)
+}))
+
+
 // Wildcard 404 Handler
 app.all("*",(req,res,next)=>{
     next(new ExpressError(404,"page not found!"));
@@ -151,5 +160,5 @@ app.use((err, req, res, next) => {
 })
 
 app.listen(8080, () => {
-    console.log("server is listening to port 8080");
+    console.log("server is listening to port http://localhost:8080");
 })
