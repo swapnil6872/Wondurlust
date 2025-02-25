@@ -11,8 +11,9 @@ const passport=require('passport');
 const LocalStrategy = require('passport-local');
 const User=require('./models/user');
 
-const listings = require('./routes/listing');
-const reviews =require('./routes/review')
+const listingRouter = require('./routes/listing');
+const reviewsRouter =require('./routes/review')
+const userRouter =require('./routes/user')
 
 
 const MONGO_URL = "mongodb://127.0.0.1:27017/wondurlust";
@@ -67,8 +68,19 @@ app.use((req,res,next)=>{
     next();
 })
 
-app.use('/listings',listings);
-app.use('/listings/:id/reviews',reviews)
+
+// app.get('/demouser',async (req,res)=>{
+//     let fakeUser = await new User({
+//         email:'student@gmail.com',
+//         username:"swapnil"
+//     })
+//     let registerUser = await User.register(fakeUser,'swapnil')
+//     res.send(registerUser);
+// })
+
+app.use('/listings',listingRouter);
+app.use('/listings/:id/reviews',reviewsRouter)
+app.use('/',userRouter);
 
 // Wildcard 404 Handler
 app.all("*",(req,res,next)=>{
