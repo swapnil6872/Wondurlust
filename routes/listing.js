@@ -3,7 +3,8 @@ const router = express.Router();
 const wrapAsync=require('../utils/wrapAsync')
 const { listingSchema } = require('../schema');
 const ExpressError = require('../utils/ExpressError');
-const Listing = require('../models/listing')
+const Listing = require('../models/listing');
+const { isLoggedIn } = require('../middleware');
 
 const validateListing =(req,res,next)=>{
     let {error}=  listingSchema.validate(req.body);
@@ -22,7 +23,7 @@ router.get('/',wrapAsync( async (req, res) => {
 }))
 
 // new Route
-router.get('/new', (req, res) => {
+router.get('/new',isLoggedIn, (req, res) => {  
     res.render('listings/new')
 });
 
@@ -38,7 +39,7 @@ router.get('/:id',wrapAsync( async (req, res) => {
 }))
 
 // create route 
-router.post('/', validateListing,wrapAsync(async(req,res,next) => {
+router.post('/', validateListing,isLoggedIn,wrapAsync(async(req,res,next) => {
          // Custom Error for Listing is empty
        
         // direct add in model by instance 
@@ -49,7 +50,7 @@ router.post('/', validateListing,wrapAsync(async(req,res,next) => {
 }));
 
 //Edit Route
-router.get('/:id/edit',wrapAsync( async (req, res) => {
+router.get('/:id/edit',isLoggedIn,wrapAsync( async (req, res) => {
     let { id } = req.params;
     const listing = await Listing.findById(id);
     if(!listing){
@@ -60,7 +61,7 @@ router.get('/:id/edit',wrapAsync( async (req, res) => {
 }));
 
 //update route
-router.put('/:id',validateListing,wrapAsync( async (req, res) => {
+router.put('/:id',validateListing,isLoggedIn,wrapAsync( async (req, res) => {
      // Custom Error for Listing is empty
   
     let { id } = req.params;
@@ -70,7 +71,7 @@ router.put('/:id',validateListing,wrapAsync( async (req, res) => {
 }))
 
 //delete route
-router.delete('/:id',wrapAsync( async (req, res) => {
+router.delete('/:id',isLoggedIn,wrapAsync( async (req, res) => {
     let { id } = req.params;
     let deleteListing = await Listing.findByIdAndDelete(id);
     req.flash('success',"Listing Deleted")
