@@ -1,9 +1,10 @@
-module.exports.isLoggedIn = (req, res,next) => {
+module.exports.isLoggedIn = (req, res, next) => {
+    console.log(req.user)
     if (!req.isAuthenticated()) {
         req.flash('error', 'you must be loggedin to Create Listings');
-        res.redirect('/login')
+        return res.redirect('/login')
     }
-    next();
+    return next();
 }
 
 

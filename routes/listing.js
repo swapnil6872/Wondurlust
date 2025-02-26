@@ -36,6 +36,7 @@ router.get('/:id',wrapAsync( async (req, res) => {
         res.redirect('/listings')
     }
     res.render('listings/show', { listing });
+    
 }))
 
 // create route 

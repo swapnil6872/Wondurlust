@@ -15,8 +15,13 @@ router.post('/signup', wrapAsync(async (req, res) => {
         const newUser = await new User({ email, username });
         const registerUser = await User.register(newUser, password);
         console.log(registerUser);
-        req.flash('success', 'Welcome to wanderlust')
-        res.redirect('/listings')
+        req.login(registerUser,(err)=>{
+            if(err){
+                return next(err);
+            }
+            req.flash('success', 'Welcome to wanderlust')
+            res.redirect('/listings')
+        })     
     } catch (error) {
         req.flash('error', error.message);
         res.redirect('/signup')
