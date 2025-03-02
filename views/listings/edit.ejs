@@ -21,8 +21,20 @@
                     <div class="invalid-feedback">Please provide a short but meaningful description.</div>
                 </div>
 
+                <!-- <div class="mb-3">
+                    Oringal Listing Image <br>
+                     <img src=" >
+                </div> -->
+                 <!-- Updated Image Display -->
+            <div class="mb-3">
+                <label class="form-label">Original Listing Image</label>
+                <div class="d-flex justify-content-center">
+                    <img src="<%=orignalimg%>" class="img-fluid rounded shadow-sm border" style="max-width: 100%; height: auto; max-height: 300px; object-fit: contain;">
+                </div>
+            </div>
+
                 <div class="mb-3">
-                    <label for="image" class="form-label">Upload new Img</label>
+                    <label for="image" class="form-label">Upload new Image</label>
                     <input type="file" id="image" name="listings[image]" class="form-control" >
                     <div class="valid-feedback">Image link looks valid!</div>
                     <div class="invalid-feedback">Please enter a valid image URL.</div>
