@@ -103,3 +103,10 @@ body{
 .delete-btn{
     background-color: #222222;
 }
+
+
+/* maps */
+#map{
+    height: 400px;
+    width:80vh
+}
