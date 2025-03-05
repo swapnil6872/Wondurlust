@@ -2,7 +2,8 @@
 
     <script>
         const mapToken = "<%= process.env.MAP_TOKEN %>";
-        const coordinates = <%-JSON.stringify(listing.geometry.coordinates)%>;
+        const listing = <%-JSON.stringify(listing)%>;
+    
     </script>
 
     <div class="container mt-4">
