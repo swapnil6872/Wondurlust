@@ -61,6 +61,13 @@
                     <div><i class="fa-solid fa-snowflake"></i></div>
                     <p>Arctic</p>
                 </div>
+
+                <div class="tax-toggle ">
+                    <div class=" form-check-reverse form-switch ">
+                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+                        <label class="form-check-label" for="flexSwitchCheckDefault">Display Total After Taxest</label>
+                      </div>
+                </div>
                 
     </div>
 
@@ -86,3 +93,10 @@
 
 
     </body>
+
+    <script>
+        let taxSwitch = document.getElementById('flexSwitchCheckDefault');
+        taxSwitch.addEventListener('click',()=>{
+            console.log('clicked');
+        })
+    </script>
