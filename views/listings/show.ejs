@@ -105,13 +105,13 @@
                                         </div>
 
                                         <!-- Delete Review -->
-                                        <% if (currUser && listing.owner._id.equals(currUser._id)) { %>
+                                        <% if(currUser && currUser._id.equals(review.author._id)){ %>                 
                                         <form
                                             action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE"
                                             class="mb-3" method="POST">
                                             <button class="btn btn-sm btn-dark">Delete</button>
                                         </form>
-                                        <% } %> 
+                                       <%}%>
                                     </div>
                                     <% } %>
                             </div>
